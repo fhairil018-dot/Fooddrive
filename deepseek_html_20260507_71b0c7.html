@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>FoodDrive | Jajanan Cepat & Custom</title>
+  <!-- Font Awesome untuk ikon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.5;
+      padding-bottom: 30px;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 100vh;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    }
+
+    /* Header ala Shopee Food */
+    .header {
+      background: linear-gradient(135deg, #ee4d2d 0%, #ff6b4a 100%);
+      color: white;
+      padding: 15px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(238, 77, 45, 0.3);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      font-size: 1.8rem;
+      background: white;
+      color: #ee4d2d;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .brand span {
+      font-size: 0.7rem;
+      opacity: 0.9;
+      display: block;
+    }
+
+    .cart-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+      position: relative;
+    }
+
+    .cart-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    #cart-count {
+      background: #ffc107;
+      color: #333;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    /* Search Bar */
+    .search-section {
+      padding: 15px 20px 10px;
+      background: white;
+      position: sticky;
+      top: 70px;
+      z-index: 99;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #f0f0f0;
+      border-radius: 25px;
+      padding: 10px 15px;
+      gap: 10px;
+    }
+
+    .search-box i {
+      color: #999;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 0.9rem;
+    }
+
+    /* Admin Tools */
+    .admin-tools {
+      background: #fff8f5;
+      border-top: 1px solid #ffe0d4;
+      border-bottom: 1px solid #ffe0d4;
+      padding: 15px 20px;
+      margin: 10px 20px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.85rem;
+    }
+
+    .admin-tools label {
+      font-weight: 600;
+      color: #ee4d2d;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .admin-tools input, .admin-tools select {
+      padding: 8px 12px;
+      border: 1px solid #ffccbb;
+      border-radius: 20px;
+      outline: none;
+      font-size: 0.85rem;
+      background: white;
+    }
+
+    .btn-sm {
+      background: #ee4d2d;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .btn-sm:hover {
+      background: #d43b1d;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #ee4d2d;
+      color: #ee4d2d;
+    }
+
+    .btn-outline:hover {
+      background: #fff0eb;
+    }
+
+    /* Kategori */
+    .categories {
+      display: flex;
+      gap: 10px;
+      padding: 10px 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .categories::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-item {
+      background: #f5f5f5;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #666;
+    }
+
+    .category-item.active {
+      background: #ee4d2d;
+      color: white;
+    }
+
+    /* Menu Grid */
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 10px 20px 5px;
+      color: #333;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 20px 20px;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      transition: transform 0.2s;
+      border: 1px solid #f0f0f0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-card:active {
+      transform: scale(0.98);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      background: #fbe9e1;
+    }
+
+    .card-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .food-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #333;
+      line-height: 1.3;
+    }
+
+    .price {
+      font-weight: 800;
+      font-size: 1rem;
+      color: #ee4d2d;
+    }
+
+    .custom-area {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .custom-area input {
+      width: 48px;
+      padding: 6px;
+      border-radius: 15px;
+      border: 1px solid #ddd;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .btn-add {
+      background: #ee4d2d;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.75rem;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .btn-add:active {
+      background: #c1351a;
+    }
+
+    /* Cart Panel */
+    .cart-panel {
+      background: white;
+      border-top: 2px solid #f0f0f0;
+      padding: 15px 20px 20px;
+      position: sticky;
+      bottom: 0;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+      margin-top: 10px;
+    }
+
+    .cart-items {
+      max-height: 180px;
+      overflow-y: auto;
+      margin: 10px 0;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 0.85rem;
+    }
+
+    .remove-item {
+      color: #c0392b;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    .total {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #ee4d2d;
+      margin: 8px 0;
+    }
+
+    .row-btn {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+
+    @media (max-width: 400px) {
+      .menu-grid {
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <div class="logo-area">
+          <div class="logo-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <div class="brand">
+            <h1>FoodDrive</h1>
+            <span>Jajan cepat & custom</span>
+          </div>
+        </div>
+        <button class="cart-btn" id="cart-toggle">
+          <i class="fas fa-shopping-bag"></i> Keranjang <span id="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-section">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari makanan favoritmu...">
+      </div>
+    </div>
+
+    <!-- Admin Tools -->
+    <div class="admin-tools">
+      <label><i class="fas fa-sliders-h"></i> Custom Makanan (Admin)</label>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <select id="foodSelect" style="flex:2; min-width: 120px;">
+          <option value="">Pilih Makanan</option>
+        </select>
+        <input type="text" id="newImageUrl" placeholder="URL Foto" style="flex:2;">
+        <input type="number" id="newPriceValue" placeholder="Harga Rp" style="flex:1; min-width: 80px;">
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-sm" id="applyCustomBtn" style="flex:1;"><i class="fas fa-check"></i> Terapkan</button>
+        <button class="btn-sm btn-outline" id="resetDefaultBtn" style="flex:1;"><i class="fas fa-undo-alt"></i> Reset</button>
+      </div>
+    </div>
+
+    <!-- Kategori -->
+    <div class="categories">
+      <div class="category-item active" data-category="all">Semua</div>
+      <div class="category-item" data-category="burger">🍔 Burger</div>
+      <div class="category-item" data-category="chicken">🍗 Ayam</div>
+      <div class="category-item" data-category="snack">🍟 Snack</div>
+      <div class="category-item" data-category="drink">🥤 Minuman</div>
+    </div>
+
+    <!-- Menu -->
+    <h3 class="section-title">🔥 Paling Laris</h3>
+    <div class="menu-grid" id="menuContainer"></div>
+
+    <!-- Cart -->
+    <div class="cart-panel" id="cartPanel">
+      <strong style="display:flex;align-items:center;gap:8px;"><i class="fas fa-receipt"></i> Pesanan Kamu</strong>
+      <div class="cart-items" id="cartItems">
+        <p style="color:#aaa; text-align:center; font-size:0.85rem;">Belum ada item.</p>
+      </div>
+      <div class="total" id="cartTotal">Total: Rp 0</div>
+      <button class="btn-sm" id="checkoutBtn" style="width:100%;"><i class="fas fa-check-circle"></i> Checkout</button>
+    </div>
+    <footer>© 2025 FoodDrive • Bisa ganti harga & foto</footer>
+  </div>
+
+  <script>
+    (function() {
+      const defaultMenu = [
+        { id: 0, name: "Fire Burger", price: 35000, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop", category: "burger" },
+        { id: 1, name: "Crispy Chicken", price: 28000, image: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400&h=300&fit=crop", category: "chicken" },
+        { id: 2, name: "Cheesy Fries", price: 22000, image: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=400&h=300&fit=crop", category: "snack" },
+        { id: 3, name: "Sushi Roll", price: 30000, image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400&h=300&fit=crop", category: "snack" },
+        { id: 4, name: "Pizza Slice", price: 25000, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop", category: "snack" },
+        { id: 5, name: "Matcha Latte", price: 18000, image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=400&h=300&fit=crop", category: "drink" },
+        { id: 6, name: "Double Cheese", price: 38000, image: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=300&fit=crop", category: "burger" },
+        { id: 7, name: "Spicy Wings", price: 26000, image: "https://images.unsplash.com/photo-1608039829572-9b6d5fc1e8b5?w=400&h=300&fit=crop", category: "chicken" }
+      ];
+
+      let menuItems = JSON.parse(JSON.stringify(defaultMenu));
+      let cart = [];
+      let currentCategory = 'all';
+
+      const menuContainer = document.getElementById('menuContainer');
+      const cartItemsDiv = document.getElementById('cartItems');
+      const cartCountSpan = document.getElementById('cart-count');
+      const cartTotalSpan = document.getElementById('cartTotal');
+      const foodSelect = document.getElementById('foodSelect');
+      const searchInput = document.getElementById('searchInput');
+
+      function filterMenu() {
+        const searchTerm = searchInput.value.toLowerCase();
+        return menuItems.filter(item => {
+          const matchCategory = currentCategory === 'all' || item.category === currentCategory;
+          const matchSearch = item.name.toLowerCase().includes(searchTerm);
+          return matchCategory && matchSearch;
+        });
+      }
+
+      function renderMenu() {
+        const filtered = filterMenu();
+        menuContainer.innerHTML = filtered.map(item => `
+          <div class="menu-card">
+            <img src="${item.image}" alt="${item.name}" class="card-img" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop';">
+            <div class="card-body">
+              <div class="food-title">${item.name}</div>
+              <div class="price">Rp ${item.price.toLocaleString('id-ID')}</div>
+              <div class="custom-area">
+                <input type="number" id="qty-${item.id}" value="1" min="1" max="20">
+                <button class="btn-add add-to-cart" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}">
+                  <i class="fas fa-plus"></i> Tambah
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+        updateFoodSelect();
+      }
+
+      function updateFoodSelect() {
+        foodSelect.innerHTML = '<option value="">Pilih Makanan</option>' + 
+          menuItems.map(item => `<option value="${item.id}">${item.name} (Rp ${item.price})</option>`).join('');
+      }
+
+      function renderCart() {
+        if (cart.length === 0) {
+          cartItemsDiv.innerHTML = '<p style="color:#aaa;text-align:center;">Belum ada item.</p>';
+          cartCountSpan.textContent = '0';
+          cartTotalSpan.textContent = 'Total: Rp 0';
+          return;
+        }
+        let total = 0;
+        cartItemsDiv.innerHTML = cart.map((item, idx) => {
+          const sub = item.price * item.quantity;
+          total += sub;
+          return `<div class="cart-item">
+            <span>${item.name} (x${item.quantity})</span>
+            <span>Rp ${sub.toLocaleString('id-ID')} <i class="fas fa-trash-alt remove-item" data-index="${idx}"></i></span>
+          </div>`;
+        }).join('');
+        cartCountSpan.textContent = cart.reduce((s,i) => s + i.quantity, 0);
+        cartTotalSpan.textContent = `Total: Rp ${total.toLocaleString('id-ID')}`;
+        document.querySelectorAll('.remove-item').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            cart.splice(parseInt(e.target.dataset.index), 1);
+            renderCart();
+          });
+        });
+      }
+
+      menuContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.add-to-cart');
+        if (!btn) return;
+        const id = parseInt(btn.dataset.id);
+        const name = btn.dataset.name;
+        const price = parseInt(btn.dataset.price);
+        const qty = parseInt(document.getElementById(`qty-${id}`)?.value || 1);
+        const existing = cart.find(i => i.id === id);
+        existing ? existing.quantity += qty : cart.push({id, name, price, quantity: qty});
+        renderCart();
+      });
+
+      document.querySelectorAll('.category-item').forEach(el => {
+        el.addEventListener('click', function() {
+          document.querySelectorAll('.category-item').forEach(c => c.classList.remove('active'));
+          this.classList.add('active');
+          currentCategory = this.dataset.category;
+          renderMenu();
+        });
+      });
+
+      searchInput.addEventListener('input', renderMenu);
+
+      document.getElementById('applyCustomBtn').addEventListener('click', () => {
+        const id = parseInt(foodSelect.value);
+        if (isNaN(id)) return alert('Pilih makanan dulu!');
+        const item = menuItems.find(i => i.id === id);
+        const img = document.getElementById('newImageUrl').value.trim();
+        const price = document.getElementById('newPriceValue').value.trim();
+        if (img && (img.startsWith('http://') || img.startsWith('https://'))) item.image = img;
+        else if (img) return alert('URL tidak valid!');
+        if (price && !isNaN(parseInt(price)) && parseInt(price) >= 500) item.price = parseInt(price);
+        else if (price) return alert('Harga minimal 500!');
+        renderMenu();
+        document.getElementById('newImageUrl').value = '';
+        document.getElementById('newPriceValue').value = '';
+        foodSelect.value = '';
+      });
+
+      document.getElementById('resetDefaultBtn').addEventListener('click', () => {
+        menuItems = JSON.parse(JSON.stringify(defaultMenu));
+        renderMenu();
+      });
+
+      document.getElementById('checkoutBtn').addEventListener('click', () => {
+        if (cart.length === 0) return alert('Keranjang kosong!');
+        const total = cart.reduce((s,i) => s + i.price*i.quantity, 0);
+        alert(`🧾 FoodDrive Checkout\nTotal: Rp ${total.toLocaleString('id-ID')}\nPesanan akan segera diproses!`);
+        cart = [];
+        renderCart();
+      });
+
+      document.getElementById('cart-toggle').addEventListener('click', () => {
+        document.getElementById('cartPanel').scrollIntoView({behavior:'smooth'});
+      });
+
+      renderMenu();
+      renderCart();
+    })();
+  </script>
+</body>
+</html>
